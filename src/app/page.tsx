@@ -69,12 +69,9 @@ export default function Home() {
     const interval = setInterval(() => {
       const currentIndex = morphViewsClass.indexOf(currentView);
       const nextIndex = (currentIndex + 1) % morphViewsClass.length;
-      animate(scope.current, { opacity: 0 }, { duration: 0.5 }).then(() => {
       setCurrentView(morphViewsClass[nextIndex]);
-      animate(scope.current, { opacity: 1 }, { duration: 0.5 });
-      });
     }, 2000);
-
+    
     return () => clearInterval(interval);
   }, [currentView]);
 
