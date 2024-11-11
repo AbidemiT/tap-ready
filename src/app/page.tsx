@@ -1,59 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  motion,
-  useAnimate,
-  useTransform,
-  useMotionValue,
-} from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import styles from "./styles.module.scss";
 import Image from "next/image";
-// import GridLayout from "@/components/GridLayout";
 
 export default function Home() {
-  const firstView = useMotionValue(0);
-  const secondView = useMotionValue(0);
-  const thirdView = useMotionValue(0);
-  const fourthView = useMotionValue(0);
-
-  const firstViewHeight = useTransform(
-    firstView,
-    [1, 2, 3, 4, 5, 6],
-    ["100%", "100%", "100%", "100%", "100%", "100%"]
-  );
-  const secondViewHeight = useTransform(
-    secondView,
-    [1, 2, 3, 4, 5, 6],
-    ["100%", "100%", "100%", "100%", "100%", "100%"]
-  );
-  const thirdViewHeight = useTransform(
-    thirdView,
-    [1, 2, 3, 4, 5, 6],
-    ["100%", "100%", "100%", "100%", "100%", "100%"]
-  );
-  const fourthViewHeight = useTransform(
-    fourthView,
-    [1, 2, 3, 4, 5, 6],
-    ["100%", "100%", "100%", "100%", "100%", "100%"]
-  );
-  const firstViewRadius = useTransform(firstView, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
-  const secondViewRadius = useTransform(secondView, [1, 2,3,4,5,6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
-  const thirdViewRadius = useTransform(thirdView, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
-  const fourthViewRadius = useTransform(fourthView, [1, 2,3,4,5,6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
-  const firstViewWidth = useTransform(
-    firstView,
-    [1, 2, 3, 4, 5, 6],
-    ["100%", "100%", "100%", "100%", "100%", "100%"]
-  );
-  const secondViewWidth = useTransform(secondView, [1, 2], ["100%", "100%"]);
-  const thirdViewWidth = useTransform(
-    thirdView,
-    [1, 2, 3, 4, 5, 6],
-    ["100%", "100%", "100%", "100%", "100%", "100%"]
-  );
-  const fourthViewWidth = useTransform(fourthView, [1, 2], ["100%", "100%"]);
-
   const morphViewsClass = [
     "firstView",
     "secondView",
@@ -61,103 +13,84 @@ export default function Home() {
     "fourthView",
   ];
 
-  const [scope, animate] = useAnimate();
-
   const [currentView, setCurrentView] = useState(morphViewsClass[0]);
+
+  // Create individual motion values for each item
+  const mv1 = useMotionValue(0);
+  const mv2 = useMotionValue(0);
+  const mv3 = useMotionValue(0);
+  const mv4 = useMotionValue(0);
+  const mv5 = useMotionValue(0);
+  const mv6 = useMotionValue(0);
+
+  // Create individual radius transforms
+  const radius1 = useTransform(mv1, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
+  const radius2 = useTransform(mv2, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
+  const radius3 = useTransform(mv3, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
+  const radius4 = useTransform(mv4, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
+  const radius5 = useTransform(mv5, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
+  const radius6 = useTransform(mv6, [1, 2, 3, 4, 5, 6], ["50%", "24px", "50%", "24px", "50%", "24px"]);
+
+  const itemRadiuses = [radius1, radius2, radius3, radius4, radius5, radius6];
 
   useEffect(() => {
     const interval = setInterval(() => {
       const currentIndex = morphViewsClass.indexOf(currentView);
       const nextIndex = (currentIndex + 1) % morphViewsClass.length;
-      animate(scope.current, { opacity: 0 }, { duration: 0.5 }).then(() => {
       setCurrentView(morphViewsClass[nextIndex]);
-      animate(scope.current, { opacity: 1 }, { duration: 0.5 });
-      });
-    }, 2000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [currentView]);
 
-  const getHeight = () => {
-    switch (currentView) {
-      case "firstView":
-        return firstViewHeight;
-      case "secondView":
-        return secondViewHeight;
-      case "thirdView":
-        return thirdViewHeight;
-      case "fourthView":
-        return fourthViewHeight;
-      default:
-        return firstViewHeight;
-    }
-  };
-  const getWidth = () => {
-    switch (currentView) {
-      case "firstView":
-        return firstViewWidth;
-      case "secondView":
-        return secondViewWidth;
-      case "thirdView":
-        return thirdViewWidth;
-      case "fourthView":
-        return fourthViewWidth;
-      default:
-        return firstViewWidth;
-    }
-  };
-  const getRadius = () => {
-    switch (currentView) {
-      case "firstView":
-        return firstViewRadius;
-      case "secondView":
-        return secondViewRadius;
-      case "thirdView":
-        return thirdViewRadius;
-      case "fourthView":
-        return fourthViewRadius;
-      default:
-        return firstViewRadius;
-    }
-  };
-
   return (
     <div>
-      {/* <h1>Hello</h1> */}
       <div className="masonry-wrapper">
-        <ul className={styles.masonry} ref={scope}>
+        <ul className={styles.masonry}>
           {[...Array(6)].map((_, index) => (
             <motion.li
-              key={index}
+              key={`grid-item-${index}`}
               className={`${styles.masonryItem} 
               ${styles[`${currentView}-${index + 1}`]}`}
+              layoutId={`grid-item-${index}`}
+              layout
               style={{
-              overflow: "hidden",
-              height: getHeight(),
-              width: getWidth(),
-              borderRadius: getRadius(),
+                borderRadius: itemRadiuses[index],
+                width: "100%"
               }}
-              animate={{
-              height: getHeight(),
-              width: getWidth(),
-              borderRadius: getRadius(),
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 35,
+                mass: 1.5,
+                duration: 1.2
               }}
-              transition={{ duration: 1 }}
             >
-              <Image
-              src={`/${index + 1}.webp`}
-              width={100}
-              height={100}
-              alt=""
-              className="object-cover w-full h-full"
-              priority
-              />
+              <motion.div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  position: 'relative',
+                }}
+                layout="preserve-aspect"
+                transition={{
+                  duration: 1.2,
+                  ease: "anticipate"
+                }}
+              >
+                <Image
+                  src={`/${index + 1}.webp`}
+                  fill
+                  alt=""
+                  className={styles.gridImage}
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+              </motion.div>
             </motion.li>
           ))}
         </ul>
       </div>
     </div>
-
-    // <GridLayout />
   );
 }
